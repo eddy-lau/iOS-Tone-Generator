@@ -136,6 +136,8 @@ OSStatus RenderTone(
 }
 
 - (void)stop {
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(stop) object:nil];
+
     if (_toneUnit) {
 		AudioOutputUnitStop(_toneUnit);
 		AudioUnitUninitialize(_toneUnit);
