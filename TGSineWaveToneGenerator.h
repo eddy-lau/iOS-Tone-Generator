@@ -32,24 +32,28 @@
 #define SINE_WAVE_TONE_GENERATOR_AMPLITUDE_FULL 0.25f
 #define SINE_WAVE_TONE_GENERATOR_AMPLITUDE_DEFAULT SINE_WAVE_TONE_GENERATOR_AMPLITUDE_MEDIUM
 
-typedef struct {
-    double frequency;
-    double amplitude;
-    double theta;
-} TGChannelInfo;
+@interface TGChannelInfo : NSObject
+    @property (nonatomic) CGFloat frequency;
+    @property (nonatomic) CGFloat amplitude;
+    @property (nonatomic) CGFloat theta;
+@end
+
+NS_ASSUME_NONNULL_BEGIN
 
 @interface TGSineWaveToneGenerator : NSObject
 
 @property (nonatomic) AudioComponentInstance toneUnit;
 @property (nonatomic) double sampleRate;
 
-@property (nonatomic) UInt32 numChannels;
-@property (nonatomic, readonly) TGChannelInfo *channels;
+@property (nonatomic, readonly) UInt32 numChannels;
+@property (nonatomic, readonly) NSArray<TGChannelInfo *> *channels;
 
 - (id)initWithChannels:(UInt32)size;
-- (id)initWithFrequency:(double)hertz amplitude:(double)volume;
+- (id)initWithFrequency:(CGFloat)hertz amplitude:(CGFloat)volume;
 - (void)playForDuration:(NSTimeInterval)time;
 - (void)play;
 - (void)stop;
 
 @end
+
+NS_ASSUME_NONNULL_END

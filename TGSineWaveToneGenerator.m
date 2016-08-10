@@ -19,7 +19,7 @@
 
 #import "TGSineWaveToneGenerator.h"
 #import <AudioToolbox/AudioToolbox.h>
-
+#import <Foundation/Foundation.h>
 
 OSStatus RenderTone(
                     void *inRefCon,
@@ -58,7 +58,10 @@ OSStatus RenderTone(
 	return noErr;
 }
 
-@implementation TGSineWaveToneGenerator 
+@implementation TGChannelInfo
+@end
+
+@implementation TGSineWaveToneGenerator
 
 - (id)init
 {
@@ -68,9 +71,9 @@ OSStatus RenderTone(
 - (id)initWithFrequency:(double)hertz amplitude:(double)volume {
     if (self = [super init]) {
         _numChannels = 1;
-        _channels = calloc(sizeof(TGChannelInfo), _numChannels);
-        if (_channels == NULL) return nil;
-        
+
+        _channels = @[[TGChannelInfo new], [TGChannelInfo new]];
+
         _channels[0].frequency = hertz;
         _channels[0].amplitude = volume;
         
@@ -91,8 +94,11 @@ OSStatus RenderTone(
 - (id)initWithChannels:(UInt32)size {
     if (self = [super init]) {
         _numChannels = size;
-        _channels = calloc(sizeof(TGChannelInfo), _numChannels);
-        if (_channels == NULL) return nil;
+        NSMutableArray *array = [NSMutableArray arrayWithCapacity:size];
+        for (NSUInteger i = 0; i < size; i++) {
+            [array addObject:[TGChannelInfo new]];
+        }
+        _channels = array;
         
         for (size_t i = 0; i < _numChannels; i++) {
             _channels[i].frequency = SINE_WAVE_TONE_GENERATOR_FREQUENCY_DEFAULT / ( i + 0.4);//Just because
@@ -108,9 +114,6 @@ OSStatus RenderTone(
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    if (_channels != NULL) {
-        free(_channels);
-    }
 }
 
 - (void)playForDuration:(NSTimeInterval)time {
