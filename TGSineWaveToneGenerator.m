@@ -32,12 +32,12 @@ OSStatus RenderTone(
 {
 	// Get the tone parameters out of the object
 	TGSineWaveToneGenerator *toneGenerator = (__bridge TGSineWaveToneGenerator *)inRefCon;
-    assert(ioData->mNumberBuffers == toneGenerator->_numChannels);
+    assert(ioData->mNumberBuffers == toneGenerator.numChannels);
     
-    for (size_t chan = 0; chan < toneGenerator->_numChannels; chan++) {
-        double theta = toneGenerator->_channels[chan].theta;
-        double amplitude = toneGenerator->_channels[chan].amplitude;
-        double theta_increment = 2.0 * M_PI * toneGenerator->_channels[chan].frequency / toneGenerator->_sampleRate;
+    for (size_t chan = 0; chan < toneGenerator.numChannels; chan++) {
+        double theta = toneGenerator.channels[chan].theta;
+        double amplitude = toneGenerator.channels[chan].amplitude;
+        double theta_increment = 2.0 * M_PI * toneGenerator.channels[chan].frequency / toneGenerator.sampleRate;
         
         Float32 *buffer = (Float32 *)ioData->mBuffers[chan].mData;
         // Generate the samples
@@ -52,7 +52,7 @@ OSStatus RenderTone(
         }
         
         // Store the theta back in the view controller
-        toneGenerator->_channels[chan].theta = theta;
+        toneGenerator.channels[chan].theta = theta;
     }
     
 	return noErr;

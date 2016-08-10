@@ -38,13 +38,13 @@ typedef struct {
     double theta;
 } TGChannelInfo;
 
-@interface TGSineWaveToneGenerator : NSObject {
-    @public
-    AudioComponentInstance _toneUnit;
-    double _sampleRate;
-    TGChannelInfo *_channels;
-    UInt32 _numChannels;
-}
+@interface TGSineWaveToneGenerator : NSObject
+
+@property (nonatomic) AudioComponentInstance toneUnit;
+@property (nonatomic) double sampleRate;
+
+@property (nonatomic) UInt32 numChannels;
+@property (nonatomic, readonly) TGChannelInfo *channels;
 
 - (id)initWithChannels:(UInt32)size;
 - (id)initWithFrequency:(double)hertz amplitude:(double)volume;
